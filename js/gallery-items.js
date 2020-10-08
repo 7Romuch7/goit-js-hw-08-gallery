@@ -3,6 +3,7 @@ import images from './images.js';
 const refs = {
     galleryContainer: document.querySelector('.js-gallery'),
     galleryLightbox: document.querySelector('.lightbox'),
+    lightboxImage: document.querySelector('.lightbox__image'),
     btnCloseModal: document.querySelector('[data-action="close-lightbox"]'),
     closeModalOverlay: document.querySelector('.lightbox__overlay'),
 };
@@ -59,8 +60,8 @@ function onGalleryContainerClick(event) {
 }
 
 function clearGalleryLightbox() {
-    refs.galleryLightbox.removeAttribute('src');
-    refs.galleryLightbox.removeAttribute('alt');
+    refs.lightboxImage.removeAttribute('src');
+    refs.lightboxImage.removeAttribute('alt');
 }
 function onRemoveClassList() {
     refs.galleryLightbox.classList.remove('is-open');
@@ -77,6 +78,7 @@ function onCloseModal(event) {
 function onOverlayClick(event) {
     if (event.currentTarget === event.target) {
         refs.galleryLightbox.classList.remove('is-open');
+        onRemoveClassList();
     }
 }
 
@@ -84,5 +86,6 @@ function onEscKeydown(event) {
     console.log(event.code);
     if (event.code === 'Escape') {
         refs.galleryLightbox.classList.remove('is-open');
+        onRemoveClassList();
     }
 }
