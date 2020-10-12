@@ -9,8 +9,8 @@ const refs = {
 const galleryMarkup = createGallery(images);
 
 refs.galleryContainer.addEventListener('click', onGalleryContainerClick);
-refs.btnCloseModal.addEventListener('click', onCloseModal);
-refs.closeModalOverlay.addEventListener('click', onOverlayClick);
+refs.btnCloseModal.addEventListener('click', onRemoveClassList);
+refs.closeModalOverlay.addEventListener('click', onRemoveClassList);
 refs.galleryContainer.insertAdjacentHTML("beforeend", galleryMarkup);
 
 function createGallery(images) {
@@ -51,19 +51,6 @@ function onRemoveClassList() {
     refs.galleryLightbox.classList.remove('is-open');
     refs.galleryLightbox.querySelector('.lightbox__image').removeAttribute('src');
     refs.galleryLightbox.querySelector('.lightbox__image').removeAttribute('alt');
-}
-
-function onCloseModal(event) {
-    window.removeEventListener('keydown', onEscKeydown);
-    if (event.target.nodeName === 'I' || event.target.nodeName === 'BUTTON') {
-        onRemoveClassList();
-    }
-}
-
-function onOverlayClick(event) {
-    if (event.currentTarget === event.target) {
-       onRemoveClassList()
-    }
 }
 
 function onEscKeydown(event) {
