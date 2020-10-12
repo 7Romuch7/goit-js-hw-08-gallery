@@ -3,49 +3,37 @@ import images from './images.js';
 const refs = {
     galleryContainer: document.querySelector('.js-gallery'),
     galleryLightbox: document.querySelector('.lightbox'),
-    lightboxImage: document.querySelector('.lightbox__image'),
     btnCloseModal: document.querySelector('[data-action="close-lightbox"]'),
     closeModalOverlay: document.querySelector('.lightbox__overlay'),
 };
-const createImg = (item, parent) => {
-    const { preview, original, description } = item;
-    const imgEl = document.createElement('img');
-    imgEl.classList.add('gallery__image');
-    imgEl.src = preview;
-    imgEl.dataset.source = original;
-    imgEl.alt = description;
-
-    parent.appendChild(imgEl);
-};
-
-const createLink = (item, parent) => {
-    const { original } = item;
-    const linkEl = document.createElement('a');
-    linkEl.classList.add('gallery__link');
-    linkEl.href = original;
-
-    createImg(item, linkEl);
-
-    parent.appendChild(linkEl);
-};
-
-const createLi = item => {
-    const liEl = document.createElement('li');
-    liEl.classList.add('gallery__item');
-    createLink(item, liEl);
-    return liEl;
-};
-
-const renderGalleryMarkUp = arrey => {
-    const items = arrey.map(item => createLi(item));
-
-    refs.galleryContainer.append(...items);
-};
-renderGalleryMarkUp(images);
+const galleryMarkup = createGallery(images);
 
 refs.galleryContainer.addEventListener('click', onGalleryContainerClick);
 refs.btnCloseModal.addEventListener('click', onCloseModal);
 refs.closeModalOverlay.addEventListener('click', onOverlayClick);
+refs.galleryContainer.insertAdjacentHTML("beforeend", galleryMarkup);
+
+function createGallery(images) {
+  return images
+    .map(({ preview, original, description }) => {
+      return `
+    <li class="gallery__item">
+        <a
+            class="gallery__link"
+            href="${original}"
+        >
+            <img
+            class="gallery__image"
+            src="${preview}"
+            data-source="${original}"
+            alt="${description}"
+            />
+        </a>
+    </li>
+    `;
+    })
+    .join("");
+}
 
 function onGalleryContainerClick(event) {
     window.addEventListener('keydown', onEscKeydown);
@@ -59,13 +47,10 @@ function onGalleryContainerClick(event) {
     }
 }
 
-function clearGalleryLightbox() {
-    refs.lightboxImage.removeAttribute('src');
-    refs.lightboxImage.removeAttribute('alt');
-}
 function onRemoveClassList() {
     refs.galleryLightbox.classList.remove('is-open');
-    clearGalleryLightbox();
+    refs.galleryLightbox.querySelector('.lightbox__image').removeAttribute('src');
+    refs.galleryLightbox.querySelector('.lightbox__image').removeAttribute('alt');
 }
 
 function onCloseModal(event) {
@@ -77,15 +62,12 @@ function onCloseModal(event) {
 
 function onOverlayClick(event) {
     if (event.currentTarget === event.target) {
-        refs.galleryLightbox.classList.remove('is-open');
-        onRemoveClassList();
+       onRemoveClassList()
     }
 }
 
 function onEscKeydown(event) {
-    console.log(event.code);
     if (event.code === 'Escape') {
-        refs.galleryLightbox.classList.remove('is-open');
-        onRemoveClassList();
+       onRemoveClassList()
     }
 }
