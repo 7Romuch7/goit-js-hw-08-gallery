@@ -3,6 +3,7 @@ import images from './images.js';
 const refs = {
     galleryContainer: document.querySelector('.js-gallery'),
     galleryLightbox: document.querySelector('.lightbox'),
+    galleryLightboxImage: document.querySelector('.lightbox__image'),
     btnCloseModal: document.querySelector('[data-action="close-lightbox"]'),
     closeModalOverlay: document.querySelector('.lightbox__overlay'),
 };
@@ -40,17 +41,15 @@ function onGalleryContainerClick(event) {
     event.preventDefault();
     if (event.target.nodeName === 'IMG') {
         refs.galleryLightbox.classList.add('is-open');
-        refs.galleryLightbox.querySelector('.lightbox__image').src =
-            event.target.dataset.source;
-        refs.galleryLightbox.querySelector('.lightbox__image').alt =
-            event.target.dataset.alt;
+        refs.galleryLightboxImage.src = event.target.dataset.source;
+        refs.galleryLightboxImage.alt = event.target.dataset.alt;
     }
 }
 
 function onRemoveClassList() {
     refs.galleryLightbox.classList.remove('is-open');
-    refs.galleryLightbox.querySelector('.lightbox__image').removeAttribute('src');
-    refs.galleryLightbox.querySelector('.lightbox__image').removeAttribute('alt');
+    refs.galleryLightboxImage.removeAttribute('src');
+    refs.galleryLightboxImage.removeAttribute('alt');
 }
 
 function onEscKeydown(event) {
